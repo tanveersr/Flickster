@@ -1,5 +1,6 @@
 package com.trandhawa.flickster.adapters;
 
+import android.content.res.Configuration;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -29,6 +30,7 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
 
 
     public MovieArrayAdapter(Context context, List<Movie> movies){
+
         super(context, android.R.layout.simple_list_item_1, movies);
     }
 
@@ -44,7 +46,12 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
         if(convertView == null){
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.item_movie, parent, false);
+            int orientation = getContext().getResources().getConfiguration().orientation;
+            if(orientation == Configuration.ORIENTATION_PORTRAIT){
+                convertView = inflater.inflate(R.layout.item_movie, parent, false);
+            } else if (orientation == Configuration.ORIENTATION_LANDSCAPE){
+                convertView = inflater.inflate(R.layout.item_movie_landscape, parent, false);
+            }
             viewHolder.title = convertView.findViewById(R.id.tvTitle);
             viewHolder.description = convertView.findViewById(R.id.tvOverview);
 

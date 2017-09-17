@@ -16,6 +16,7 @@ import com.trandhawa.flickster.models.*;
 import java.util.ArrayList;
 import cz.msebera.android.httpclient.Header;
 import android.widget.ListView;
+import android.content.res.Configuration;
 
 public class MovieActivity extends AppCompatActivity {
 
@@ -26,7 +27,12 @@ public class MovieActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_movie);
+        int orientation = getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            setContentView(R.layout.activity_movie);
+        } else if (orientation == Configuration.ORIENTATION_LANDSCAPE){
+            setContentView(R.layout.activity_movie_landscape);
+        }
 
         lvItems = (ListView)findViewById(R.id.lvMovies);
         movies = new ArrayList<>();
