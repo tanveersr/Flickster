@@ -21,6 +21,13 @@ import com.trandhawa.flickster.models.Movie;
 
 public class MovieArrayAdapter extends ArrayAdapter<Movie> {
 
+    // View lookup cache
+    private static class ViewHolder {
+        TextView title;
+        TextView description;
+    }
+
+
     public MovieArrayAdapter(Context context, List<Movie> movies){
         super(context, android.R.layout.simple_list_item_1, movies);
     }
@@ -31,11 +38,20 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
 
         // get data item for position
         Movie movie = getItem(position);
+        ViewHolder viewHolder;
 
         // check the existing view being used
         if(convertView == null){
+            viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.item_movie, parent, false);
+            viewHolder.title = convertView.findViewById(R.id.tvTitle);
+            viewHolder.description = convertView.findViewById(R.id.tvOverview);
+
+            // cache the viewHolder object inside the fresh view
+            convertView.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
         }
 
         // find the image view
@@ -51,6 +67,12 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
         tvOverview.setText(movie.getOverview());
 
         Picasso.with(getContext()).load(movie.getPosterPath()).into(ivImage);
+        // Populate the data from the data object via the viewHolder object
+        // into the template view.
+
+        viewHolder.title.setText(movie.getOriginalTitle());
+        viewHolder.description.setText(movie.getOverview());
+
         return convertView;
     }
 }
